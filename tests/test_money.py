@@ -1,7 +1,7 @@
 from locale import currency
 import unittest
 
-from LearnTdd.money import Money
+from LearnTdd.money import Money, Portfolio
 
 class TestMoney(unittest.TestCase):
     def testMultipicationInDollars(self):
@@ -18,6 +18,14 @@ class TestMoney(unittest.TestCase):
         originalMoney = Money(amount=4002, currency="KRW")
         expectedMoneyAfterDivison = Money(amount=1000.5, currency="KRW")
         self.assertEqual(originalMoney.divide(4), expectedMoneyAfterDivison)
+    
+    def testAddition(self):
+        fiveDollars = Money(5, "USD")
+        tenDollars = Money(10, "USD")
+        fifteenDollars = Money(15, "USD")
+        portfolio = Portfolio()
+        portfolio.add(fiveDollars, tenDollars)
+        self.assertEqual(fifteenDollars, portfolio.evaluate("USD"))
 
 if __name__ == "__main__":
     unittest.main()

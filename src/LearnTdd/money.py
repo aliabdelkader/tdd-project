@@ -1,3 +1,7 @@
+from typing import List
+import functools
+import operator
+
 class Money():
     def __init__(self, amount: float, currency: str) -> None:
         self.amount = amount
@@ -11,3 +15,17 @@ class Money():
     
     def __eq__(self, __o: object) -> bool:
         return (self.amount == __o.amount) and (self.currency == __o.currency)
+
+class Portfolio:
+    def __init__(self) -> None:
+        self.portfolio = [] # type: Money
+
+    def add(self, *p):
+        self.portfolio.extend(p)
+    
+    def evaluate(self, currency: str):
+        # total = sum([p.amount for p in self.portfolio])
+        total = functools.reduce(
+            operator.add, map(lambda p: p.amount, self.portfolio), 0
+        )
+        return Money(amount=total, currency=currency)
