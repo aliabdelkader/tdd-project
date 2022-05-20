@@ -1,3 +1,4 @@
+from cmath import exp
 from locale import currency
 import unittest
 
@@ -35,6 +36,15 @@ class TestMoney(unittest.TestCase):
         expectedValue  = Money(17, "USD")
         actualValue = p.evaluate("USD")
         self.assertEqual(expectedValue, actualValue, f"expected: {expectedValue} != {actualValue}")
+    
+    def testAdditionOfDollarsAndWon(self):
+        oneDollar = Money(1, "USD")
+        elevenHundredWon = Money(1100, "KRW")
+        p = Portfolio()
+        p.add(oneDollar, elevenHundredWon)
+        expectedValue = Money(2200, "KRW")
+        actualValue = p.evaluate("KRW")
+        self.assertEqual(expectedValue, actualValue, f"{expectedValue} != {actualValue}")
 
 if __name__ == "__main__":
     unittest.main()

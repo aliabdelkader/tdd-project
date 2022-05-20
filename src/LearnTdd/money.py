@@ -22,18 +22,18 @@ class Money():
 class Portfolio:
     def __init__(self) -> None:
         self.portfolio = [] # type: Money
-        self._euro_to_usd = 1.2
 
     def add(self, *p):
         self.portfolio.extend(p)
 
     
     def __convert(self, aMoney, aCurrency):
+        exchangeRates = {'EUR->USD': 1.2, 'USD->KRW': 1100}
         if aMoney.currency == aCurrency:
             return aMoney.amount
-        
         else:
-            return aMoney.amount * self._euro_to_usd 
+            exchange = exchangeRates[f"{aMoney.currency}->{aCurrency}"]
+            return aMoney.amount * exchange
     
     def evaluate(self, currency: str):
         # total = sum([p.amount for p in self.portfolio])
