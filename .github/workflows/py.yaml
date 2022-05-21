@@ -22,6 +22,6 @@ jobs:
       
       - name:
         run: | 
-          "python setup.py develop"
-          "python tests/test_money.py -v"
+          python setup.py develop
+          python tests/test_money.py -v
         shell: bash
