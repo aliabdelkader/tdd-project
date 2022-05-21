@@ -32,12 +32,22 @@ class Portfolio:
         if aMoney.currency == aCurrency:
             return aMoney.amount
         else:
-            exchange = exchangeRates[f"{aMoney.currency}->{aCurrency}"]
+            key = f"{aMoney.currency}->{aCurrency}"
+            exchange = exchangeRates[key]
             return aMoney.amount * exchange
+            
     
     def evaluate(self, currency: str):
-        # total = sum([p.amount for p in self.portfolio])
-        total = functools.reduce(
-            operator.add, map(lambda p: self.__convert(p, currency), self.portfolio), 0
-        )
-        return Money(amount=total, currency=currency)
+        total = 0.0
+        failure = []
+        for m in self.portfolio:
+            try:
+                total += self.__convert(m, currency)
+            except KeyError as ke:
+                failure.append(ke)
+
+        if len(failure) == 0:
+            return Money(amount=total, currency=currency)
+        else:
+            failureMessage = ",".join(str(f.args[0]) for f in failure)
+            raise Exception("Missing exchange rate \(\s\):\[" + failureMessage + "]")
