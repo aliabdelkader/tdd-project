@@ -7,3 +7,5 @@ setup(
     packages=find_packages("src", include=["LearnTdd"]),
     package_dir={"":"src"}
 )
+
+print("finished setup for LearnTdd")
