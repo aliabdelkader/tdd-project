@@ -37,12 +37,12 @@ class Portfolio:
             return aMoney.amount * exchange
             
     
-    def evaluate(self, currency: str):
+    def evaluate(self, bank, currency: str):
         total = 0.0
         failure = []
         for m in self.portfolio:
             try:
-                total += self.__convert(m, currency)
+                total += bank.convert(m, currency).amount
             except KeyError as ke:
                 failure.append(ke)
 
@@ -51,3 +51,22 @@ class Portfolio:
         else:
             failureMessage = ",".join(str(f.args[0]) for f in failure)
             raise Exception("Missing exchange rate \(\s\):\[" + failureMessage + "]")
+    
+class Bank():
+    def __init__(self) -> None:
+        self.exchangeTable = {}
+
+    def addExchangeRate(self, f: str, to: str, rate: float):
+        key = f +'->' + to
+        self.exchangeTable[key] = rate
+    
+    def convert(self, money, currency):
+        if money.currency == currency:
+            return money
+        
+        else:
+            key = money.currency + '->' + currency
+            if key in self.exchangeTable:
+                return Money(money.amount * self.exchangeTable[key], currency)
+        
+        raise Exception(key)
