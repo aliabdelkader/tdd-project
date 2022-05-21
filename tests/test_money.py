@@ -53,12 +53,14 @@ class TestMoney(unittest.TestCase):
         actualValue = p.evaluate(self.bank, "KRW")
         self.assertEqual(expectedValue, actualValue, f"{expectedValue} != {actualValue}")
 
-    def testConversion(self):
+    def testConversionBetweenTwoCurrencyWithDifferentExchangeRate(self):
         bank = Bank()
-        bank.addExchangeRate("EUR", "USD", 1.2)
+        bank.addExchangeRate("EUR", "USD", 1.3)
         tenEuros = Money(10, "EUR")
-        self.assertEqual(Money(12, "USD"), bank.convert(tenEuros, "USD"))
-    
+        self.assertEqual(Money(13, "USD"), bank.convert(tenEuros, "USD"))
+
+        self.assertEqual(Money(12, "USD"), self.bank.convert(tenEuros, "USD"))
+
     def testConversionWithMissingExchange(self):
         tenEuros = Money(10, "EUR")
         with self.assertRaisesRegex(Exception, "EUR->Kalganid"):
